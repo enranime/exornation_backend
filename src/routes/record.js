@@ -6,7 +6,7 @@ const RecordModel = require('../models/record');
 
 const createRequestSchema = Joi.object({
   activityName: Joi.string().required(),
-  timestamp: Joi.string().required(),
+  timestamp: Joi.date().required(),
   duration: Joi.number().min(0).required(),
   calories: Joi.number().min(0).required(),
   description: Joi.string().allow('').required(),
@@ -20,21 +20,35 @@ const updateRequestSchema = Joi.object({
   description: Joi.string().allow(''),
 });
 
+const recordExample = {
+    activityName: 'Running',
+    timestamp: new Date(),
+    duration: 4000,
+    calories: 200,
+    description: 'examplerecord',
+}
+
+const recordExampleUpdate = {
+    activityName: 'Running',
+    timestamp: new Date(),
+    duration: 6000,
+    calories: 300,
+}
+
 const router = express.Router();
 
 router.use('/:recordId', async (req, res, next) => {
   const foundRecord = await RecordModel.findById(req.params.recordId);
   if (!foundRecord) {
     return res.status(404).send('Record not found');
-  }
-    router.get('/:recordId', (req, res, next) => {
-    return res.send(req.record);
-    });
+  }  
+     req.record = foundRecord;
+     next();
 });
 
 
 router.get('/:recordId', (req, res, next) => {
-  return res.send(req.record);
+  return res.status(200).send(req.record);
 });
 
 router.get('/', async(req, res, next) => {
@@ -43,7 +57,8 @@ router.get('/', async(req, res, next) => {
 });
 
 router.post('/',async (req, res, next) => {
-  const body = req.body;
+  // const body = req.body;
+  const body = recordExample;
   const newRecord = new RecordModel(body);
 
   const errors = newRecord.validateSync();
@@ -65,28 +80,27 @@ router.post('/',async (req, res, next) => {
 });
 
 
-router.put('/:recordId', (req, res, next) => {
-  const body = req.body;
+router.put('/:recordId', async (req, res, next) => {
+  const body = req.record
+  
+  // // validate
+  // const validateResult = updateRequestSchema.validate(body);
+  // if (validateResult.error) {
+  //   // failed validation
+  //   return res.status(400).send('Invalid request');
+  // }
 
-  // validate
-  const validateResult = updateRequestSchema.validate(body);
-  if (validateResult.error) {
-    // failed validation
-    return res.status(400).send('Invalid request');
-  }
+  body.timestamp = recordExampleUpdate.timestamp;
+  body.duration = recordExampleUpdate.duration;
+  body.calories = recordExampleUpdate.calories;
 
-  const updatedRecord = {
-    ...req.record,
-    ...body,
-  };
-  records[req.recordIndex] = updatedRecord;
-  return res.status(201).send(updatedRecord);
+
+  console.log(body);
+  body.save();  
+  
+  return res.status(201).send();
 });
 
-// router.delete('/:recordId', (req, res, next) => {
-//   records.splice(req.recordIndex, 1);
-//   return res.status(204).send(); // 204 = No content which mean it successfully removed
-// });
 
 router.delete('/:recordId', async (req, res, next) => {
   await RecordModel.deleteOne({ _id: req.params.recordId });
