@@ -31,8 +31,8 @@ const recordExample = {
 const recordExampleUpdate = {
     activityName: 'Running',
     timestamp: new Date(),
-    duration: 6000,
-    calories: 300,
+    duration: 5000,
+    calories: 100,
 }
 
 const router = express.Router();
@@ -89,16 +89,19 @@ router.put('/:recordId', async (req, res, next) => {
   //   // failed validation
   //   return res.status(400).send('Invalid request');
   // }
+  // const updatedRecord = {
+  //   ...req.record,
+  //   ...recordExampleUpdate
+  // }
 
   body.timestamp = recordExampleUpdate.timestamp;
   body.duration = recordExampleUpdate.duration;
   body.calories = recordExampleUpdate.calories;
 
 
-  console.log(body);
-  body.save();  
+  await body.save();  
   
-  return res.status(201).send();
+  return res.status(201).send(body);
 });
 
 
