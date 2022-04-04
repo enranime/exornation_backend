@@ -16,7 +16,10 @@ app.use('/users',userRouter)
 
 const boot = async () => {
     // connect to mongodb
-    await mongoose.connect(config.mongoUri, config.mongoOptions);
+    await mongoose.connect(config.mongoUri, config.mongoOptions
+        ).then(
+            console.log('connect to mongodb')
+        );
     // start express server 
     app.listen(4000, () => {
         console.log('Server is running');

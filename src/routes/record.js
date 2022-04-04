@@ -2,7 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 
 
-const recordModel = require('../models/record');
+const RecordModel = require('../models/record');
 
 const createRequestSchema = Joi.object({
   activityName: Joi.string().required(),
@@ -42,9 +42,8 @@ router.get('/', async(req, res, next) => {
   res.send(records);
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',async (req, res, next) => {
   const body = req.body;
-
   const newRecord = new RecordModel(body);
 
   const errors = newRecord.validateSync();
@@ -60,6 +59,7 @@ router.post('/', (req, res, next) => {
     // failed validation
     return res.status(400).send('Invalid request');
   }
+
   await newRecord.save();
   return res.status(201).send(newRecord);
 });
