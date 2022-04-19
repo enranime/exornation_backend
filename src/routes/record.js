@@ -20,20 +20,6 @@ const updateRequestSchema = Joi.object({
   description: Joi.string().allow(''),
 });
 
-const recordExample = {
-    activityName: 'Running',
-    timestamp: new Date(),
-    duration: 4000,
-    calories: 200,
-    description: 'examplerecord',
-}
-
-const recordExampleUpdate = {
-    activityName: 'Running',
-    timestamp: new Date(),
-    duration: 5000,
-    calories: 100,
-}
 
 const router = express.Router();
 
@@ -57,23 +43,24 @@ router.get('/', async(req, res, next) => {
 });
 
 router.post('/',async (req, res, next) => {
-  // const body = req.body;
-  const body = recordExample;
+ 
+  const body = req.body;
+  console.log(body);
   const newRecord = new RecordModel(body);
 
-  const errors = newRecord.validateSync();
-  if (errors) {
-    const errorFieldNames = Object.keys(errors.errors);
-    if (errorFieldNames.length > 0) {
-      return res.status(400).send(errors.errors[errorFieldNames[0]].message);
-    }
-  }
-  // validate
-  const validateResult = createRequestSchema.validate(body);
-  if (validateResult.error) {
-    // failed validation
-    return res.status(400).send('Invalid request');
-  }
+  // const errors = newRecord.validateSync();
+  // if (errors) {
+  //   const errorFieldNames = Object.keys(errors.errors);
+  //   if (errorFieldNames.length > 0) {
+  //     return res.status(400).send(errors.errors[errorFieldNames[0]].message);
+  //   }
+  // }
+  // // validate
+  // const validateResult = createRequestSchema.validate(body);
+  // if (validateResult.error) {
+  //   // failed validation
+  //   return res.status(400).send('Invalid request validation failed');
+  // }
 
   await newRecord.save();
   return res.status(201).send(newRecord);
@@ -81,8 +68,10 @@ router.post('/',async (req, res, next) => {
 
 
 router.put('/:recordId', async (req, res, next) => {
+  const body1 = req.body;
+  console.log(body1);
   const body = req.record
-  
+  console.log(body);
   // // validate
   // const validateResult = updateRequestSchema.validate(body);
   // if (validateResult.error) {
@@ -94,9 +83,12 @@ router.put('/:recordId', async (req, res, next) => {
   //   ...recordExampleUpdate
   // }
 
-  body.timestamp = recordExampleUpdate.timestamp;
-  body.duration = recordExampleUpdate.duration;
-  body.calories = recordExampleUpdate.calories;
+
+  body.activityName = body1.activityName;
+  body.activityType = body1.activityType;
+  body.activityDuration = body1.activityDuration;
+  body.activityDate = body1.activityDate;
+  body.activityDescription = body1.activityDescription;
 
 
   await body.save();  
@@ -108,6 +100,7 @@ router.put('/:recordId', async (req, res, next) => {
 router.delete('/:recordId', async (req, res, next) => {
   await RecordModel.deleteOne({ _id: req.params.recordId });
   return res.status(204).send(); // 204 = No content which mean it successfully removed
+  
 });
 
 module.exports = router;
