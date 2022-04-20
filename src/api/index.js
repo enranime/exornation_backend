@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const config = require('../config')
 const cors = require('cors');
 const app = express();
-const router = express.Router();
+const PORT = process.env.PORT || 4001;
 /*
 When running on Vercel, Vercel will take express "app" exported from this file.
 We do not have control over port and things that should be run before the app.listen()
@@ -31,11 +31,6 @@ app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 
-
-
-app.get('/', (req,res,next) => {
-  return res.send("helloworld");
-});
 
 app.use('/users',userRouter);
 

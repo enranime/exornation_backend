@@ -13,8 +13,8 @@ const boot = async () => {
             console.log('connect to mongodb')
         );
     // start express server 
-    app.listen(4000, () => {
-        console.log('Server is running');
+    app.listen(config.port, () => {
+        console.log(`Server is running on port ${config.port}`);
     });
 };
 
