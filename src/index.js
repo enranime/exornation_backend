@@ -1,11 +1,11 @@
-const express = require('express');
+
 const mongoose = require('mongoose');
 const config = require('./config');
-const app = express();
+const app = require('./api/index');
 
 
 
-console.log(process.env.mongoUri);
+
 const boot = async () => {
     // connect to mongodb
     await mongoose.connect(config.mongoUri, config.mongoOptions

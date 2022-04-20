@@ -10,5 +10,8 @@ router.post('/register', (req, res, next) => {});
 router.get('/me', (req, res, next) => {});
 router.put('/me', (req, res, next) => {});
 
+router.get('/', (req,res,next) => {
+    return res.status.send("helloworld");
+});
 
 module.exports = router;
