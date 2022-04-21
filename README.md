@@ -11,3 +11,5 @@ Exercise project backend example. Implemented using express.js.
 
 ## Note
 `src/config.js` will contains your mongodb database credentials (user, pass). Be careful and do not add/commit/push this file to your GitHub. 
+
+Add     "rewrites": [{ "source": "/(.*)", "destination": "/api" }] to json file
