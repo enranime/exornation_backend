@@ -6,7 +6,9 @@ app.use(express.json({extend: false}));
 
 app.use("/api/product", product);
 
-console.log("hello world");
+app.get("/",(req,res,next) => {
+    res.status(200).send("Hello World")
+});
 
 const PORT = process.env.PORT || 8080;
 
