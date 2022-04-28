@@ -26,6 +26,8 @@ if (config.isVercel) {
 }
 
 
+console.log('hello vercel');
+
 app.use(cors({
     origin: '*',
     optionsSuccessStatus: 200,
