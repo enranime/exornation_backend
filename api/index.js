@@ -5,6 +5,8 @@ const config = require('../config')
 const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 4001;
+const mongoose = require('mongoose');
+
 /*
 When running on Vercel, Vercel will take express "app" exported from this file.
 We do not have control over port and things that should be run before the app.listen()
