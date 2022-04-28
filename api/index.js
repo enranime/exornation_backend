@@ -31,6 +31,10 @@ app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 
+app.get("/",(req,res,next) => {
+  res.status(200).send("Hello World")
+});
+
 
 app.use('/users',userRouter);
 
