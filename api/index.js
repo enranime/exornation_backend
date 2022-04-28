@@ -13,6 +13,9 @@ to ensure database is connected before our code trying to query the it.
 
 Note: Create new connection to database before every request is not a good practice and can cause issues for some database.
  */
+
+console.log('connect to vercel');
+
 if (config.isVercel) {
   app.use(async (req, res, next) => {
     await mongoose.connect(config.mongoUri, config.mongoOptions);
